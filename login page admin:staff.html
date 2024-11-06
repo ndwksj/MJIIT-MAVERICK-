@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJIIT Login</title>
+  <link rel="stylesheet" href="styles 1.css">
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div class="login-page" id="loginPage">
+    <header>
+      <h1>MJIIT</h1>
+      <img src="logo mjiit.png" alt="logo mjiit" style="width:50%">
+      <h3>Malaysia-Japan International Institute of Technology</h3>
+    </header>
+
+    <!-- Toggle between Admin and Staff Login -->
+    <div class="login-toggle">
+      <button onclick="showAdminLogin()" id="adminBtn" class="active">Admin Login</button>
+      <button onclick="showStaffLogin()" id="staffBtn">Staff Login</button>
+    </div>
+
+    <!-- Admin Login Form -->
+    <div class="login-form" id="adminLoginForm">
+      <h2>Admin Login</h2>
+      <form>
+        <label for="adminUsername">Username</label>
+        <input type="text" id="adminUsername" placeholder="Enter Admin Username" required>
+        
+        <label for="adminPassword">Password</label>
+        <input type="password" id="adminPassword" placeholder="Enter Password" required>
+        
+        <button type="button" onclick="redirectToAdminPage()">Login as Admin</button>
+      </form>
+    </div>
+
+    <!-- Staff Login Form -->
+    <div class="login-form" id="staffLoginForm" style="display: none;">
+      <h2>Staff Login</h2>
+      <form>
+        <label for="staffUsername">Username</label>
+        <input type="text" id="staffUsername" placeholder="Enter Staff Username" required>
+        
+        <label for="staffPassword">Password</label>
+        <input type="password" id="staffPassword" placeholder="Enter Password" required>
+        
+        <button type="button" onclick="alert('Staff login successful')">Login as Staff</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
