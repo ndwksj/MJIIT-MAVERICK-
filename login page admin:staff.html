@@ -51,6 +51,38 @@
     </div>
   </div>
 
+  <!-- Admin Main Page -->
+<div class="admin-main-page" id="adminMainPage" style="display: none;">
+  <header>
+    <h1>MJIIT</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
+  
+  <h2>Staff List</h2>
+  <button onclick="showAddStaffForm()">Add Staff</button>
+  <button onclick="enableUpdateMode()">Update</button>
+  <button onclick="enableDeleteMode()">Delete</button>
+
+  <ul id="staffList">
+    <!-- Sample staff items for demonstration -->
+    <li>John Doe <button class="update-btn" style="display: none;" onclick="updateStaff()">Update</button>
+      <button class="delete-btn" style="display: none;" onclick="confirmDelete()">Delete</button></li>
+    <li>Jane Smith <button class="update-btn" style="display: none;" onclick="updateStaff()">Update</button>
+      <button class="delete-btn" style="display: none;" onclick="confirmDelete()">Delete</button></li>
+  </ul>
+</div>
+
+<!-- Add Staff Form -->
+<div id="addStaffForm" style="display: none;">
+  <h3>Add New Staff</h3>
+  <form>
+    <input type="text" placeholder="Name" required>
+    <input type="text" placeholder="Position" required>
+    <button type="button" onclick="addStaff()">Save</button>
+    <button type="button" onclick="hideAddStaffForm()">Cancel</button>
+  </form>
+</div>
+
   <script src="scripts.js"></script>
 </body>
 </html>
