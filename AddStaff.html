@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Staff</title>
+    <style>
+        body {
+            background-color: #e0ffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container1 {
+            width: 40%;
+            margin: 50px auto;
+            background-color: #0069699b;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #008080;
+            margin-bottom: 30px;
+        }
+
+        p {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            text-align: left;
+            color: #008080;
+            margin-bottom: 30px;
+            font-size: 21px;
+        }
+
+        .form-group {
+            margin-bottom: 1px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        textarea {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn1 {
+            background-color: #ec3c3c;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            /* Red */
+        }
+
+        .btn:hover {
+            background-color: #0069699b;
+        }
+
+        .logo {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 650px;
+        }
+
+        .required {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="logo">
+        <img src="images/logo.png" alt="MJIIT Logo">
+    </div>
+    <p>MALAYSIA - JAPAN INTERNATIONAL INSTITUTE OF TECHNOLOGY</p>
+    <h1>Add New Staff</h1>
+
+    <div class="container1">
+        <div class="form-group">
+            <label for="name">Name <span class="required">*</span></label>
+            <input type="text" id="name" placeholder="Enter text here"><br><br>
+
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="text" id="phone" placeholder="Enter text here"><br><br>
+
+            <label for="department">Department <span class="required">*</span></label>
+            <input type="text" id="department" placeholder="Enter text here"><br><br>
+
+            <label for="email">Email <span class="required">*</span></label>
+            <input type="email" id="email" placeholder="Enter text here"><br><br>
+
+            <label for="address">Address <span class="required">*</span></label>
+            <input type="text" id="address" placeholder="Enter text here"><br><br>
+
+            <label for="username">Username <span class="required">*</span></label>
+            <input type="text" id="username" placeholder="Enter text here"><br><br>
+
+            <label for="password">Password <span class="required">*</span></label>
+            <input type="password" id="password" placeholder="Enter text here"><br><br>
+
+            <label for="retypePassword">Retype Password <span class="required">*</span></label>
+            <input type="password" id="retypePassword" placeholder="Enter text here"><br><br>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <a href="AdminDashboard.html" class="btn1">Cancel</a>
+        <button class="btn" onclick="saveStaff()">Save</button>
+    </div>
+
+    <script>
+        // JavaScript to handle saving staff info to the server
+        async function saveStaff() {
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const department = document.getElementById("department").value;
+            const email = document.getElementById("email").value;
+            const address = document.getElementById("address").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const retypePassword = document.getElementById("retypePassword").value;
+
+            if (!name || !phone || !department || !email || !address || !username || !password || !retypePassword) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            if (password !== retypePassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const staff = {
+                name,
+                phone,
+                department,
+                email,
+                address,
+                username,
+                password,
+            };
+
+            try {
+                const response = await fetch('/api/staff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(staff)
+                });
+
+                if (response.ok) {
+                    alert("Staff added successfully!");
+                    // Redirect to the staff list page
+                    window.location.href = "StaffDashboard.html";
+                } else {
+                    alert("Error adding staff.");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("An error occurred while adding staff.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

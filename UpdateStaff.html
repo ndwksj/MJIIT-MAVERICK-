@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Staff</title>
+    <style>
+        body {
+            background-color: #e0ffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container1 {
+            width: 40%;
+            margin: 50px auto;
+            background-color: #0069699b;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #008080;
+            margin-bottom: 30px;
+        }
+
+        p {
+
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            text-align: left;
+            color: #008080;
+            margin-bottom: 30px;
+            font-size: 21px;
+        }
+
+        .form-group {
+            margin-bottom: 1px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        textarea {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn1 {
+            background-color: #ec3c3c;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            /* Red */
+        }
+
+        .btn:hover {
+            background-color: #0069699b;
+        }
+
+        .logo {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 650px;
+        }
+
+        .required {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="logo ">
+        <img src="images/logo.png" alt="MJIIT Logo">
+    </div>
+    <p>MALAYSIA - JAPAN INTERNATIONAL INSTITUTE OF TECHNOLOGY</p>
+    <h1>Update staff</h1>
+
+    <div class="container1">
+        <div class="form-group">
+            <label for="inputField">Name <span class="required">*</span></label>
+            <input type="text" id="inputField" placeholder="Enter text here"><br><br>
+
+            <label for="inputField">Phone Number <span class="required">*</span></label>
+            <input type="text" id="inputField" placeholder="Enter text here"><br><br>
+
+            <label for="inputField">Department <span class="required">*</span></label>
+            <input type="text" id="inputField" placeholder="Enter text here"><br><br>
+
+            <label for="inputField">Email <span class="required">*</span></label>
+            <input type="text" id="inputField" placeholder="Enter text here"><br><br>
+
+            <label for="inputField">Address <span class="required">*</span></label>
+            <input type="text" id="inputField" placeholder="Enter text here"><br><br>
+          <!--  <button class="update-btn" onclick="updateStaff()">Update</button>-->
+          
+
+        </div>
+    </div>
+    <div class="btn-container">
+        <a href="AdminDashboard.html" class="btn1">Cancel</a>
+        <a href="AdminDashboard.html" class="btn" onclick="saveStaff()">Save</a>
+    </div>
+    <script>
+        // Fetch staff data using ID from URL query parameter and populate the form
+        async function fetchStaffData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const staffId = urlParams.get('id');
+
+            if (staffId) {
+                try {
+                    const response = await fetch(`/api/staff/${staffId}`);
+                    const staffData = await response.json();
+
+                    // Populate the form fields with the staff data
+                    document.getElementById('name').value = staffData.name;
+                    document.getElementById('phone').value = staffData.phone;
+                    document.getElementById('department').value = staffData.department;
+                    document.getElementById('email').value = staffData.email;
+                    document.getElementById('address').value = staffData.address;
+                } catch (error) {
+                    console.error('Error fetching staff data:', error);
+                }
+            }
+        }
+
+        // Call fetchStaffData when the page loads
+        document.addEventListener('DOMContentLoaded', fetchStaffData);
+
+        // Update the staff data
+        async function updateStaff() {
+            const staffId = new URLSearchParams(window.location.search).get('id');
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const department = document.getElementById('department').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+
+            const updatedStaff = {
+                name,
+                phone,
+                department,
+                email,
+                address
+            };
+
+            if (staffId) {
+                try {
+                    const response = await fetch(`/api/staff/${staffId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedStaff)
+                    });
+
+                    if (response.ok) {
+                        alert('Staff updated successfully!');
+                        window.location.href = 'AdminDashboard.html'; // Redirect to the admin dashboard
+                    } else {
+                        alert('Failed to update staff.');
+                    }
+                } catch (error) {
+                    console.error('Error updating staff:', error);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

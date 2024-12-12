@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Deletion Interface</title>
+    <style>
+        /* Basic styling for layout and colors */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #e6f4f1;
+            padding: 20px;
+            width: 100%;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            color: #00695c;
+        }
+
+        .staff-list {
+            margin-top: 20px;
+        }
+
+        .staff-item {
+            background-color: #516e67;
+            color: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #ff4b4b;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn1 {
+            background-color: #ec3c3c;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* Pop-up confirmation styling */
+        .confirmation-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff3b0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .popup-buttons {
+            margin-top: 10px;
+        }
+
+        .popup-button {
+            padding: 8px 15px;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .popup-yes {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .popup-no {
+            background-color: #baffc9;
+            color: #333;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo ">
+            <img src="images/logo.png" alt="MJIIT Logo">
+        </div>
+        <p>MALAYSIA - JAPAN INTERNATIONAL INSTITUTE OF TECHNOLOGY</p>
+        
+
+
+
+    <div class="container">
+        <h2>Staff List</h2>
+        <p style="color: red;">You are in deletion mode</p>
+        <div class="staff-list" id="staff-list"></div>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div class="confirmation-popup" id="confirmationPopup">
+        <div class="popup-content">
+            <p>This action cannot be undone. Are you sure?</p>
+            <div class="popup-buttons">
+                <button class="popup-button popup-no" onclick="closePopup()">No</button>
+                <button class="popup-button popup-yes" onclick="deleteStaff()">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let staffIdToDelete = null;
+
+        // Fetch the staff list from the backend
+        async function fetchStaffList() {
+            try {
+                const response = await fetch('/api/staff');
+                const staffList = await response.json();
+                const staffListContainer = document.getElementById('staff-list');
+                staffListContainer.innerHTML = ''; // Clear existing list
+
+                staffList.forEach(staff => {
+                    const staffItem = document.createElement('div');
+                    staffItem.classList.add('staff-item');
+                    staffItem.innerHTML = `
+                    <span>Name: ${staff.name} - Department: ${staff.department}</span>
+                    <button class="delete-button" onclick="confirmDelete(${staff.id})">Delete</button>
+                `;
+                    staffListContainer.appendChild(staffItem);
+                });
+            } catch (error) {
+                console.error('Error fetching staff list:', error);
+            }
+        }
+
+        // Store the staff ID to be deleted
+        function confirmDelete(staffId) {
+            staffIdToDelete = staffId;
+            document.getElementById('confirmationPopup').style.display = 'flex';
+        }
+
+        // Close the confirmation popup
+        function closePopup() {
+            document.getElementById('confirmationPopup').style.display = 'none';
+        }
+
+        // Delete the staff member
+        async function deleteStaff() {
+            try {
+                const response = await fetch(`/api/staff/${staffIdToDelete}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                alert(result.message); // Show success message
+                closePopup();
+                fetchStaffList(); // Refresh the staff list after deletion
+            } catch (error) {
+                console.error('Error deleting staff member:', error);
+                alert('Failed to delete staff member');
+            }
+        }
+
+        // Fetch the staff list when the page loads
+        document.addEventListener('DOMContentLoaded', fetchStaffList);
+    </script>
+
+</body>
+
+</html>
